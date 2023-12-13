@@ -1,10 +1,23 @@
 import requests
 import json
+import sys
 
-votes = "https://canon-4.api.network.umee.cc/umee/oracle/v1/validators/aggregate_votes"
+APIURL = "canon-4.api.network.umee.cc"
+ENV = "canon"
+
+
+n = len(sys.argv)
+if n > 1 and sys.argv[1] == 'prod':
+    APIURL = "api-umee-ia.cosmosia.notional.ventures"
+    ENV = "prod"
+
+print(f">>>>> ENV :: {ENV}")
+print(f">>>>> API :: {APIURL}")
+
+votes = f"https://{APIURL}/umee/oracle/v1/validators/aggregate_votes"
 
 def get_accepted_denoms():
-    r = requests.get(url="https://canon-4.api.network.umee.cc/umee/oracle/v1/params")
+    r = requests.get(url=f"https://{APIURL}/umee/oracle/v1/params")
     data = r.json()
     return data['params']['accept_list']
 
@@ -15,7 +28,7 @@ for i in range(0,len(denoms_resp)):
 acceped_denoms = list(set(acceped_denoms))         
 
 def get_validators():
-    r = requests.get(url="https://canon-4.api.network.umee.cc/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED")
+    r = requests.get(url=f"https://{APIURL}/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED")
     data = r.json()
     return data['validators']
 

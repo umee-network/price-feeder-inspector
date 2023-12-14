@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const getReq = async (url) => {
-  return await fetch((url = url))
+  return await fetch(url)
     .then((resp) => resp.json())
     .then((resp) => {
       return resp;
@@ -32,7 +32,7 @@ export default function Votes() {
         valaddr +
         "/miss"
     ).then((e) => {
-      if (missCounters.hasOwnProperty(valaddr)) {
+      if (missCounters[valaddr]) {
         let mc = missCounters[valaddr];
         if (mc["misses"].length > 30) {
           mc["misses"] = [];

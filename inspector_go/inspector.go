@@ -20,7 +20,7 @@ func StartInspector(cfg config.Configuration, rpcUri, apiUri string) error {
 
 	aceeptedDenoms := rpc.GetAcceptedDenoms(codec, apiUri)
 	log.Println("Total Accepted Denoms ", len(aceeptedDenoms))
-	log.Println("Oracle Accepted Denoms ", aceeptedDenoms)
+	log.Println("Oracle Accepted Denoms ", strings.Join(aceeptedDenoms, ","))
 
 	latestBlockHeight, err := rpc.GetLatestHeight(rpcUri)
 	if err != nil {

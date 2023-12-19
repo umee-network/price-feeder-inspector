@@ -85,19 +85,23 @@ func StartInspector(cfg config.Configuration, rpcUri, grpcUri string) error {
 	for v := range votes {
 		log.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 		log.Printf("ℹ️ Validator %s and Moniker %s\n", v, vInfo[v])
-		log.Println("ExpectedNoOfVotes ", votes[v].ExpectedNoOfVotes)
-		log.Println("Total Submited votes ", votes[v].NoOfVotes)
-		log.Println("Votes WithOut MissCounter ", votes[v].VotesWithOutMissCounter)
-		log.Println("Votes with missing denoms", votes[v].NoOfMissCounter)
-		log.Println("Missing denoms at Height =>")
-		for _, d := range votes[v].MissingDenomsAtHeight {
-			log.Printf("At height %d missing denoms %s\n", d.Height, strings.Join(d.Denoms, ","))
-		}
-		log.Println("Missing Denoms Count")
-		for k, c := range votes[v].MissingDenomsCount {
-			log.Printf("Denom %s => %d", k, c)
-		}
+		printValidatorVotes(votes[v])
 	}
 
 	return nil
+}
+
+func printValidatorVotes(validatorVotes config.ValidatorsVotes) {
+	log.Println("ExpectedNoOfVotes ", validatorVotes.ExpectedNoOfVotes)
+	log.Println("Total Submited votes ", validatorVotes.NoOfVotes)
+	log.Println("Votes WithOut MissCounter ", validatorVotes.VotesWithOutMissCounter)
+	log.Println("Votes with missing denoms", validatorVotes.NoOfMissCounter)
+	log.Println("Missing denoms at Height =>")
+	for _, d := range validatorVotes.MissingDenomsAtHeight {
+		log.Printf("At height %d missing denoms %s\n", d.Height, strings.Join(d.Denoms, ","))
+	}
+	log.Println("Missing Denoms Count")
+	for k, c := range validatorVotes.MissingDenomsCount {
+		log.Printf("Denom %s => %d", k, c)
+	}
 }

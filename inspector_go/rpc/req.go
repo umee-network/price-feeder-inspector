@@ -4,27 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"time"
 
 	ctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/cosmos/cosmos-sdk/types/module/testutil"
-	"github.com/umee-network/umee/v6/sdkclient/query"
 	otypes "github.com/umee-network/umee/v6/x/oracle/types"
 )
 
+// GetAcceptedDenoms returns a list of accepted denominations by oracle.
 func GetAcceptedDenoms(codec testutil.TestEncodingConfig, grpcEndpoint string) []string {
-	logger := log.New(os.Stderr, "chain-client", log.LstdFlags)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	queryClient, err := query.NewClient(logger, grpcEndpoint, 15*time.Second)
-	if err != nil {
-		log.Fatalf("Failed to initalize the query client %s and Error:  %s", grpcEndpoint, err.Error())
-	}
-
-	oQueryClient := otypes.NewQueryClient(queryClient.GrpcConn)
+	oQueryClient := GetOracleGrpcClient(grpcEndpoint)
 	resp, err := oQueryClient.Params(ctx, &otypes.QueryParams{})
 	if err != nil {
 		log.Fatalf("Failed to get the oracle params,Error: %s", err.Error())
@@ -42,6 +35,9 @@ func GetAcceptedDenoms(codec testutil.TestEncodingConfig, grpcEndpoint string) [
 	return accepedDenoms
 }
 
+// FetchTxSearchData fetches transaction search data based on the provided RPC client and transaction height.
+// It constructs a query based on the transaction height and message action, then fetches the data using the RPC client.
+// The function returns an array of ResultTx and an error, if any.
 func FetchTxSearchData(rpcClient RPCClient, txHeight int64) ([]*ctypes.ResultTx, error) {
 	query := fmt.Sprintf("tx.height=%d AND message.action='/umee.oracle.v1.MsgAggregateExchangeRateVote'", txHeight)
 	fetchData := func(page int) ([]*ctypes.ResultTx, int) {

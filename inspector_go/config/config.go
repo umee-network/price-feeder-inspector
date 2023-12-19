@@ -1,9 +1,10 @@
 package config
 
 import (
-	"encoding/json"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 func ReadConfig(configFile string) (Configuration, error) {
@@ -13,7 +14,7 @@ func ReadConfig(configFile string) (Configuration, error) {
 		return Configuration{}, err
 	}
 	var cfg Configuration
-	err = json.Unmarshal(file, &cfg)
+	err = yaml.Unmarshal(file, &cfg)
 	if err != nil {
 		log.Printf("Failed to parse config file. Error: %s", err)
 		return Configuration{}, err

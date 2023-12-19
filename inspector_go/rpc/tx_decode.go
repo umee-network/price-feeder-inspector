@@ -1,23 +1,17 @@
 package rpc
 
 import (
+	ctypes "github.com/cometbft/cometbft/types"
 	"github.com/cosmos/cosmos-sdk/types/module/testutil"
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/umee-network/price_inspector/config"
-	"github.com/umee-network/price_inspector/utils"
-	"github.com/umee-network/umee/v6/app"
 	otypes "github.com/umee-network/umee/v6/x/oracle/types"
 )
 
 // TxDecoder decodes a base64 encoded transaction data and returns a slice of ValidatorExgRates and an error if the decoding fails.
-func TxDecoder(txData string, codec testutil.TestEncodingConfig) ([]config.ValidatorExgRates, error) {
-	d, err := utils.DecodeBase64(txData)
-	if err != nil {
-		return nil, err
-	}
-	codec = app.MakeEncodingConfig()
+func TxDecoder(txData ctypes.Tx, codec testutil.TestEncodingConfig) ([]config.ValidatorExgRates, error) {
 	var c txtypes.Tx
-	err = codec.Codec.Unmarshal(d, &c)
+	err := codec.Codec.Unmarshal(txData, &c)
 	if err != nil {
 		return nil, err
 	}

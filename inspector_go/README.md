@@ -23,11 +23,11 @@
     "networks": {
         "canon": {
             "rpc": "http://localhost:26657",
-            "api": "http://localhost:1317"
+            "grpc": "http://localhost:9090"
         },
         "mainnet": {
             "rpc": "http://umee.rpc.m.stavr.tech:10457",
-            "api": "https://api-umee-ia.cosmosia.notional.ventures"
+            "grpc": "umee-grpc.polkachu.com:13690"
         }
     }
 }

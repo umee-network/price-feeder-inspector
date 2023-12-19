@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"strconv"
 	"strings"
 	"time"
 
@@ -12,20 +11,19 @@ import (
 	"github.com/umee-network/umee/v6/app"
 )
 
-func StartInspector(cfg config.Configuration, rpcUri, apiUri string) error {
+func StartInspector(cfg config.Configuration, rpcUri, grpcUri string) error {
 	codec := app.MakeEncodingConfig()
 	log.Println("RPC URL : ", rpcUri)
-	log.Println("API URL : ", apiUri)
+	log.Println("GRPC URL : ", grpcUri)
 	log.Println("WINDOW  : ", cfg.Window)
 
-	aceeptedDenoms := rpc.GetAcceptedDenoms(codec, apiUri)
+	rpcClient := rpc.GetRPCClient(rpcUri)
+
+	aceeptedDenoms := rpc.GetAcceptedDenoms(codec, grpcUri)
 	log.Println("Total Accepted Denoms ", len(aceeptedDenoms))
 	log.Println("Oracle Accepted Denoms ", strings.Join(aceeptedDenoms, ","))
 
-	latestBlockHeight, err := rpc.GetLatestHeight(rpcUri)
-	if err != nil {
-		return err
-	}
+	latestBlockHeight := rpcClient.GetLatestHeight()
 	lastBlockHeight := latestBlockHeight - cfg.Window
 	log.Printf("Latest Block Height %d", latestBlockHeight)
 	log.Printf("Last Block Height for fetching the data %d\n", lastBlockHeight)
@@ -43,20 +41,16 @@ func StartInspector(cfg config.Configuration, rpcUri, apiUri string) error {
 
 	for i := lastBlockHeight; i < latestBlockHeight; i++ {
 		log.Printf("Getting transactions on at height : %d\n", i)
-		txs, err := rpc.FetchTxSearchData(codec, rpcUri, i)
+		txs, err := rpc.FetchTxSearchData(rpcClient, i)
 		if err != nil {
 			return err
 		}
-		var height int64
 		for _, r := range txs {
 			vr, err := rpc.TxDecoder(r.Tx, codec)
 			if err != nil {
 				log.Printf("Failed to decode tx data. Error: %s", err)
 			}
-			height, err = strconv.ParseInt(r.Height, 10, 64)
-			if err != nil {
-				return err
-			}
+			height := r.Height
 			for _, c := range vr {
 				var denoms []string
 				for _, d := range c.ExgRatesTuples {

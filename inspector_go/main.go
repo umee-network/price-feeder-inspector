@@ -30,12 +30,12 @@ func main() {
 				return err
 			}
 			rpc := cfg.Networks.Canon.RPC
-			api := cfg.Networks.Canon.API
+			grpc := cfg.Networks.Canon.GRPC
 			if network == "mainnet" {
 				rpc = cfg.Networks.Mainnet.RPC
-				api = cfg.Networks.Mainnet.API
+				grpc = cfg.Networks.Mainnet.GRPC
 			}
-			return StartInspector(cfg, rpc, api)
+			return StartInspector(cfg, rpc, grpc)
 		},
 	}
 

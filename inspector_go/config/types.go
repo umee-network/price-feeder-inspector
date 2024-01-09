@@ -52,6 +52,10 @@ type Configuration struct {
 			RPC  string `json:"rpc"`
 			GRPC string `json:"grpc"`
 		} `json:"mainnet"`
+		Local struct {
+			RPC  string `json:"rpc"`
+			GRPC string `json:"grpc"`
+		} `json:"local"`
 	} `json:"networks"`
 }
 

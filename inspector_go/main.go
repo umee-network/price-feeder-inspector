@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -29,17 +30,25 @@ func main() {
 			if err != nil {
 				return err
 			}
-			rpc := cfg.Networks.Canon.RPC
-			grpc := cfg.Networks.Canon.GRPC
-			if network == "mainnet" {
+			var rpc, grpc string
+			switch network {
+			case "mainnet":
 				rpc = cfg.Networks.Mainnet.RPC
 				grpc = cfg.Networks.Mainnet.GRPC
+			case "canon":
+				rpc = cfg.Networks.Canon.RPC
+				grpc = cfg.Networks.Canon.GRPC
+			case "local":
+				rpc = cfg.Networks.Local.RPC
+				grpc = cfg.Networks.Local.GRPC
+			default:
+				log.Fatalf("this netwokr %s is not supported", network)
 			}
 			return StartInspector(cfg, rpc, grpc)
 		},
 	}
 
-	rootCmd.Flags().String(config.Network, "canon", "Network to use (canon/mainnet)")
+	rootCmd.Flags().String(config.Network, "canon", "Network to use (canon/mainnet/local)")
 	rootCmd.Flags().String(config.Config, "config.json", "Path to the configuration file")
 
 	if err := rootCmd.Execute(); err != nil {

@@ -9,6 +9,9 @@ import (
 
 	ctypes "github.com/cometbft/cometbft/rpc/core/types"
 	"github.com/cosmos/cosmos-sdk/types/module/testutil"
+	"github.com/cosmos/cosmos-sdk/types/query"
+	stypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
 	otypes "github.com/umee-network/umee/v6/x/oracle/types"
 )
 
@@ -33,6 +36,31 @@ func GetAcceptedDenoms(codec testutil.TestEncodingConfig, grpcEndpoint string) [
 		accepedDenoms = append(accepedDenoms, a)
 	}
 	return accepedDenoms
+}
+
+// GetValidators returns validators list.
+func GetValidators(codec testutil.TestEncodingConfig, grpcEndpoint string) []stypes.Validator {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	validators := make([]stypes.Validator, 0)
+	pagination := query.PageRequest{}
+
+	var getValidators func()
+	getValidators = func() {
+		sClient := GetStakingGrpcClient(grpcEndpoint)
+		resp, err := sClient.Validators(ctx, &stypes.QueryValidatorsRequest{Status: stypes.BondStatusBonded, Pagination: &pagination})
+		if err != nil {
+			log.Fatalf("Failed to get the validators,Error: %s", err.Error())
+		}
+		validators = append(validators, resp.Validators...)
+		if len(resp.Pagination.NextKey) != 0 {
+			pagination.Key = resp.Pagination.NextKey
+			getValidators()
+		}
+	}
+	getValidators()
+	return validators
 }
 
 // FetchTxSearchData fetches transaction search data based on the provided RPC client and transaction height.

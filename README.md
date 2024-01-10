@@ -15,5 +15,19 @@ $ python3 votes_inspector.py --network mainnet
 $ python3 votes_inspector.py
 ```
 
-## WEB Interface
-<!-- TODO: update -->
+
+## [Historical Oracle Votes Inspector](./inspector_go/README.md)
+
+### Build 
+```bash
+$ cd inspector_go 
+// build the binary
+$ make build
+```
+
+### How to run ? 
+
+
+```bash
+$ ./build/price_inspector --config <CONFIG.yaml> --network canon
+```

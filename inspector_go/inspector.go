@@ -34,9 +34,18 @@ func StartInspector(cfg config.Configuration, rpcUri, grpcUri string) error {
 	votes := make(map[string]config.ValidatorsVotes)
 	vInfo := make(map[string]string)
 
-	for _, v := range cfg.Validators {
-		votes[v.Validator] = config.NewValidatorVotes(v.Validator, expectedNoOfVotes)
-		vInfo[v.Validator] = v.Moniker
+	if len(cfg.Validators) == 0 {
+		log.Println("ℹ️ Getting all staking validators...")
+		validators := rpc.GetValidators(codec, grpcUri)
+		for _, val := range validators {
+			votes[val.OperatorAddress] = config.NewValidatorVotes(val.OperatorAddress, expectedNoOfVotes)
+			vInfo[val.OperatorAddress] = val.GetMoniker()
+		}
+	} else {
+		for _, v := range cfg.Validators {
+			votes[v.Validator] = config.NewValidatorVotes(v.Validator, expectedNoOfVotes)
+			vInfo[v.Validator] = v.Moniker
+		}
 	}
 
 	for i := lastBlockHeight; i < latestBlockHeight; i++ {

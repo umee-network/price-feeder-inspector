@@ -42,13 +42,13 @@ func main() {
 				rpc = cfg.Networks.Local.RPC
 				grpc = cfg.Networks.Local.GRPC
 			default:
-				log.Fatalf("this netwokr %s is not supported", network)
+				log.Fatalf("this network %s is not supported", network)
 			}
 			return StartInspector(cfg, rpc, grpc)
 		},
 	}
 
-	rootCmd.Flags().String(config.Network, "canon", "Network to use (canon/mainnet/local)")
+	rootCmd.Flags().String(config.Network, "canon", "Network to use  (canon, mainnet or local)")
 	rootCmd.Flags().String(config.Config, "config.json", "Path to the configuration file")
 
 	if err := rootCmd.Execute(); err != nil {

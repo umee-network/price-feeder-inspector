@@ -1,9 +1,11 @@
 ---
 validators:
-- validator: umeevaloper1wusrw8nzgs6d8d47xqej5xqttvsu2geftfgu5f
-  moniker: Stakewolle.com | Auto-compound
-- validator: umeevaloper16kukyg8l6qse6n2rq24qr6qd3ylgnnzmut8v3u
-  moniker: Coinpayu
+# - validator: umeevaloper1hd4zwgmu2uax5pp43mqdnn09720qmvuqjenkr4
+#   moniker: val-1
+- validator: umeevaloper1y6xz2ggfc0pcsmyjlekh0j9pxh6hk87ymuzzdn
+  moniker: test
+# - validator: umeevaloper1flsa6pzsafkfx58qqh3vq66a8gtauecleq64nx
+#   moniker: val-4
 window: 20
 networks:
   canon:
@@ -13,5 +15,5 @@ networks:
     rpc: http://umee.rpc.m.stavr.tech:10457
     grpc: umee-grpc.polkachu.com:13690
   local:
-    rpc: http://localhost:26657
-    grpc: http://localhost:9090
+    rpc: http://localhost:16657
+    grpc: tcp://localhost:8090

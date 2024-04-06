@@ -2,6 +2,7 @@ import requests
 import json
 import sys
 
+global valaddrs
 def print_error(r):
     print("Error on req ",r.status_code)
     sys.exit(-1)
@@ -97,19 +98,12 @@ if __name__ == "__main__":
     if args.network == "canon":
         APIURL = "canon-4.api.network.umee.cc"
     else:
-        APIURL = "api-umee-ia.cosmosia.notional.ventures"
+        APIURL = "umee-api.polkachu.com"
     
     print(f">>>>> network :: {args.network}")
     print(f">>>>> API :: {APIURL}")
     votes_inspector(APIURL=APIURL)
-
-    print("*"*100)
-    print("Below validators does not submit the votes at all")
-    for i in range(0,len(valaddrs)):
-        if voted_validators.count(valaddrs[i]) == 0 :
-            print("❌" ,valaddrs[i], ">>", get_moniker(validators,valaddrs[i])," is does not submit the votes for denoms")
-
-
+    
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()

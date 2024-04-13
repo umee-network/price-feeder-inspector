@@ -1,7 +1,7 @@
 export default function Footer() {
     return (
-        <footer class="pt-5 my-5 text-body-secondary border-top">
+        <div className="container root-bg ubuntu-light py-3 my-4 border-top">
             Created by the <img src="https://app.ux.xyz/favicon.png" width={16}></img> Umee Team &middot; &copy; 2024
-        </footer>
+        </div>
     )
 }

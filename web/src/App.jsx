@@ -3,10 +3,10 @@ import MissBeat from './components/MissBeat'
 import { useEffect, useState } from 'react'
 import { getReq } from './js/utils';
 import Footer from './components/Footer';
+import Header from './components/header';
 
 function App() {
 	const [oracleAcceptedDenoms, setOracleAcceptedDenoms] = useState([]);
-
 	useEffect(() => {
 		const url = "https://umee-api.polkachu.com"
 		if (oracleAcceptedDenoms.length == 0) {
@@ -24,13 +24,10 @@ function App() {
 	return (
 		<div className="root-app container-fluid">
 			<div className="container">
-				<br></br>
-				{/* <Header></Header> */}
 				<MissBeat denoms={oracleAcceptedDenoms}></MissBeat>
 				<br></br>
 				<Votes></Votes>
 				<br></br>
-				<Footer></Footer>
 			</div>
 		</div>
 	)

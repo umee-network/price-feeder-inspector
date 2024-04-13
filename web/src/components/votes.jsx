@@ -20,6 +20,8 @@ export default function Votes() {
 				if (newMissCounters.hasOwnProperty(missCounter.validator) && mc.hasOwnProperty('miss_count')) {
 					if (mc['misses'].length >= 14) {
 						mc['misses'] = []
+					}else{
+						mc['misses'] = mc['misses']
 					}
 					if (mc['miss_count'] < missCounter.miss_counter) {
 						mc['misses'].push({ "count": missCounter.miss_counter, "status": true })
@@ -43,14 +45,6 @@ export default function Votes() {
 		})
 	}
 
-	const getValidatorName = (valoperAddr) => {
-		for (let i = 0; i < validators.length; i++) {
-			if (validators[i].operator_address == valoperAddr) {
-				return validators[i].description.moniker
-			}
-		}
-	}
-
 	const getValidator = (valoperAddr) => {
 		for (let i = 0; i < validators.length; i++) {
 			if (validators[i].operator_address == valoperAddr) {
@@ -69,7 +63,6 @@ export default function Votes() {
 	}
 
 	useEffect(() => {
-		// const url = "https://canon-4.api.network.umee.cc"
 		if (validators.length == 0) {
 			getReq(
 				url + "/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED"
@@ -93,10 +86,7 @@ export default function Votes() {
 		<>
 			{vStatus == 0 ? (
 				<p style={{ textAlign: "center" }}>
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-						<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
-						<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
-					</svg> Getting validators data... </p>
+					<i className="bi bi-arrow-clockwise"></i> Getting validators data... </p>
 			) : (
 				<div className="container">
 					<br></br>
@@ -124,8 +114,8 @@ export default function Votes() {
 						{Object.entries(missCounters).map(([key, missCounter]) => {
 							return (getValidator(key) ?
 								<div className="col-4" key={key}>
-									<div class="row">
-										<div class="col-8"><label className="truncate text-start">
+									<div className="row">
+										<div className="col-8"><label className="truncate text-start">
 											<span
 												className="ubuntu-light ml-1 text-black  text-truncate dark:text-white">
 												{sNo++}. {getValidator(key).description.moniker.substr(0, 26)}

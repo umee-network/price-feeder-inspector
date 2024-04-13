@@ -2,7 +2,11 @@
 	background-color: transparent;
 }
 
-.root-app {
+#root {
+	background-color: #fafafa;
+}
+
+.root-bg {
 	background-color: #fafafa;
 }
 

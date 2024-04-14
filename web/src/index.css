@@ -71,3 +71,11 @@
 .no-anchor{
 	text-decoration: none !important;
 }
+
+.text-black{
+	color: black;
+}
+
+.ux-color{
+	color: #070927 !important;
+}

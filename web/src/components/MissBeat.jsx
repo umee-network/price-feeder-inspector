@@ -8,7 +8,7 @@ export default function MissBeat(props) {
                 margin: "auto",
             }}
         >
-            <h3 className="ubuntu-bold" style={{ color: "green",marginTop:50 }}>
+            <h3 className="ubuntu-light" style={{ color: "green",marginTop:50 }}>
                 Umee Validators Price Feeder Stats
             </h3>
             <p className="ubuntu-light">There are totally <b>{props.denoms.length}</b> unique assets are accepted by Umee Oracle module</p>

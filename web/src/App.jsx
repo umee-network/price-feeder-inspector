@@ -2,8 +2,6 @@ import Votes from './components/Votes'
 import MissBeat from './components/MissBeat'
 import { useEffect, useState } from 'react'
 import { getReq } from './js/utils';
-import Footer from './components/Footer';
-import Header from './components/header';
 
 function App() {
 	const [oracleAcceptedDenoms, setOracleAcceptedDenoms] = useState([]);

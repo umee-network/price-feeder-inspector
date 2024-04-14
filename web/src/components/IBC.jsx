@@ -19,17 +19,13 @@ function IBCPage() {
     const [totalInflow, setTotalInflow] = useState(null)
     const [ibcQuotaParams, setIBCQuotaParams] = useState(null)
     const [quotaExpiresAt, setQuotaExpiresAt] = useState(null)
+    const [oracleDenomos, setOracleDenoms] = useState(null)
 
-    const getIBCFlows = async (url) => {
+    const getIBCFlows = async (url, oracleDenomos) => {
         getReq(url + "/umee/uibc/v1/all_outflows").then((resp) => {
-            let newIBCObj = {}
+            let newIBCObj = oracleDenomos
             resp.outflows.forEach((outflow) => {
-                newIBCObj[outflow.denom] = {
-                    "denom": outflow.denom,
-                    "outflow": outflow.amount,
-                    "symbol": outflow.symbol,
-                    "inflow": 0
-                }
+                newIBCObj[outflow.denom]["outflow"] = outflow.amount
             })
 
             getReq(url + "/umee/uibc/v1/outflows").then((resp) => {
@@ -37,16 +33,7 @@ function IBCPage() {
             })
             getReq(url + "/umee/uibc/v1/inflows").then((resp) => {
                 resp.inflows.forEach((inflow) => {
-                    if (newIBCObj[inflow.denom]) {
-                        newIBCObj[inflow.denom]["inflow"] = inflow.amount
-                    } else {
-                        newIBCObj[inflow.denom] = {
-                            "denom": inflow.denom,
-                            "inflow": inflow.amount,
-                            "symbol": inflow.symbol,
-                            "outflow": 0
-                        }
-                    }
+                    newIBCObj[inflow.denom]["inflow"] = inflow.amount
                 })
                 let sortedData = Object.entries(newIBCObj).map(([key, flow]) => {
                     return flow
@@ -67,17 +54,32 @@ function IBCPage() {
             })
         }
 
+        if (oracleDenomos == null) {
+            getReq(url + "/umee/oracle/v1/params").then((resp) => {
+                let newObj = {}
+                resp.params.accept_list.forEach((c) => {
+                    newObj[c.base_denom] = {
+                        "denom": c.base_denom,
+                        "symbol": c.symbol_denom,
+                        "inflow": "0",
+                        "outflow": "0",
+                    }
+                })
+                setOracleDenoms(newObj)
+                if (Object.entries(ibcFlows).length == 0) {
+                    getIBCFlows(url, newObj)
+                }
+            })
+        }
+
         if (quotaExpiresAt == null) {
             getReq(url + "/umee/uibc/v1/quota_expires").then((resp) => {
                 setQuotaExpiresAt(resp.end_time)
             })
         }
 
-        if (Object.entries(ibcFlows).length == 0) {
-            getIBCFlows(url)
-        }
         const intervalCall = setInterval(() => {
-            getIBCFlows(url)
+            getIBCFlows(url, oracleDenomos)
         }, 8000);
         return () => {
             clearInterval(intervalCall);
@@ -86,8 +88,8 @@ function IBCPage() {
 
     return (
         <div className="container">
-            <h3 className="ubuntu-bold" style={{ color: "green", marginTop: 50 }}>
-                IBC Inflows & Outflow on Umee App
+            <h3 className="ubuntu-light" style={{ color:"green", marginTop: 50 }}>
+                IBC Inflows & Outflows on Umee App
             </h3>
 
             {status == 0 ? <div className="ubuntu-light center">Getting data...</div> :
@@ -134,4 +136,5 @@ function IBCPage() {
         </div>
     )
 }
+
 export default IBCPage

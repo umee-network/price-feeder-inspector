@@ -1,5 +1,4 @@
-import { Link, Outlet, useLocation } from "react-router-dom"
-import Footer from "./Footer"
+import { Link, useLocation } from "react-router-dom"
 
 export default function Header() {
     const getActivePath = () => {
@@ -22,18 +21,23 @@ export default function Header() {
                         <ul className="navbar-nav">
                             <li className="nav-item">
                                 <Link className={getActivePath() == "/" ? "nav-link active" : "nav-link"} to="/">
-                                    <i className="bi bi-house"></i>  Home</Link>
+                                    {getActivePath()=="/"?<i className="bi bi-house-fill"></i>:<i className="bi bi-house"></i>}  Home
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className={getActivePath() == "/pf_stats" ? "nav-link active" : "nav-link"} to="/pf_stats">
+                                {getActivePath()=="/pf_stats"?<i className="bi bi-display-fill"></i>:<i className="bi bi-display"></i>} PF Stats
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <Link className={getActivePath() == "/ibc" ? "nav-link active" : "nav-link"} to="/ibc">
-                                    <i class="bi bi-arrow-down-up"></i> IBC</Link>
+                                    <i class="bi bi-arrow-down-up"></i> IBC
+                                </Link>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-            <Outlet></Outlet>
-            <Footer></Footer>
         </>
     )
 }

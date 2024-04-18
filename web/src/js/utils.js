@@ -8,3 +8,14 @@ export const getReq = async (url) => {
 			console.log(err);
 		});
 };
+
+export const localDate = (inp) => {
+	let ns = new Date(inp)
+	return ns.toLocaleString()
+}
+
+export const USDollar = new Intl.NumberFormat('en-US', {
+	style: 'currency',
+	currency: 'USD',
+	minimumFractionDigits: 8,
+});

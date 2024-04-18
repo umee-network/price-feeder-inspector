@@ -1,18 +1,9 @@
 import { useEffect, useState } from "react"
-import { getReq } from "../js/utils"
+import { USDollar, getReq, localDate } from "../js/utils"
 
 function IBCPage() {
     let sNo = 1
-    let USDollar = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    });
-
-    const localDate = (inp) => {
-        let ns = new Date(inp)
-        return ns.toLocaleString()
-    }
-
+    
     const [status, setStatus] = useState(0)
     const [ibcFlows, setIBCFlows] = useState({})
     const [totalOutflow, setTotalOutflow] = useState(null)
@@ -45,6 +36,7 @@ function IBCPage() {
             })
         })
     }
+
     useEffect(() => {
         const url = "https://umee-api.polkachu.com"
         if (ibcQuotaParams == null) {
@@ -99,7 +91,7 @@ function IBCPage() {
                     {/* <p className="ubuntu-light">Total outflows from umee chain is {JSON.stringify(ibcQuotaParams)}</p> */}
                     <p className="ubuntu-light">We have total ibc outflow limit <b>{USDollar.format(parseInt(ibcQuotaParams.total_quota))}</b> and each token have <b>{USDollar.format(parseInt(ibcQuotaParams.token_quota))}</b> on IBC Rate Limits and every <b>{parseInt(ibcQuotaParams.quota_duration) / 3600}</b> hours IBC Quota will reset. Currently we don't have any IBC inflow limitations but ibc inflow will effect the ibc outflows quota.</p>
                     <p className="ubuntu-light">
-                        <i className="bi bi-stopwatch"></i> IBC Quota will reset at : {localDate(quotaExpiresAt)}</p>
+                        <i className="bi bi-stopwatch"></i> IBC Quota will reset at : <b>{localDate(quotaExpiresAt)}</b></p>
                     {
                         Object.entries(ibcFlows).length > 0 ? <>
                             <table className="table ubuntu-light table-hover">
@@ -108,8 +100,8 @@ function IBCPage() {
                                         <th scope="col">#</th>
                                         <th scope="col">IBC Denom</th>
                                         <th scope="col">Symbol</th>
-                                        <th scope="col" className="ubuntu-light">Inflow <b>{USDollar.format(parseInt(totalInflow))}</b></th>
-                                        <th scope="col" className="ubuntu-light">Outflow <b>{USDollar.format(parseInt(totalOutflow))}</b></th>
+                                        <th scope="col" className="ubuntu-light">Inflow <b>{USDollar.format(totalInflow)}</b></th>
+                                        <th scope="col" className="ubuntu-light">Outflow <b>{USDollar.format(totalOutflow)}</b></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -121,10 +113,10 @@ function IBCPage() {
                                                 <td>{flow.symbol.toUpperCase()}</td>
                                                 <td>
                                                     <i class="bi bi-arrow-left-short"></i>
-                                                    {USDollar.format(parseInt(flow.inflow).toFixed(2))}
+                                                    {USDollar.format(flow.inflow)}
                                                 </td>
                                                 <td>
-                                                    <i class="bi bi-arrow-right-short"></i> {USDollar.format(parseInt(flow.outflow).toFixed(2))}
+                                                    <i class="bi bi-arrow-right-short"></i> {USDollar.format(flow.outflow)}
                                                 </td>
                                             </tr>
                                         })

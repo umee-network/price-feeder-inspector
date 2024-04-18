@@ -34,6 +34,11 @@ export default function Header() {
                                     <i class="bi bi-arrow-down-up"></i> IBC
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className={getActivePath() == "/exg_rates" ? "nav-link active" : "nav-link"} to="/exg_rates">
+                                    <i class="bi bi-currency-dollar"></i> Exg Rates
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>

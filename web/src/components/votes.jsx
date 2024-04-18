@@ -76,7 +76,8 @@ export default function Votes() {
 		}
 		const intervalCall = setInterval(() => {
 			getPFMissCounters(url)
-		}, 5000);
+			// calling the miss counter api for every 24 seconds , mostly every 3 blocks 
+		}, 24000);
 		return () => {
 			clearInterval(intervalCall);
 		};

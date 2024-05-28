@@ -108,19 +108,3 @@ if __name__ == "__main__":
     for i in range(0,len(valaddrs)):
         if voted_validators.count(valaddrs[i]) == 0 :
             print("❌" ,valaddrs[i], ">>", get_moniker(validators,valaddrs[i])," is does not submit the votes for denoms")
-
-
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--network", type=str,default="mainnet", help="Enter network name : canon or mainnet , by default mainnet")
-    args = parser.parse_args()
-    if args.network == "canon":
-        APIURL = "canon-4.api.network.umee.cc"
-    else:
-        APIURL = "api-umee-ia.cosmosia.notional.ventures"
-    
-    print(f">>>>> network :: {args.network}")
-    print(f">>>>> API :: {APIURL}")
-    votes_inspector(APIURL=APIURL)
